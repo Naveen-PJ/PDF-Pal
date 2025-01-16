@@ -1,3 +1,9 @@
+# Ignore Python cache files
 __pycache__/
 *.pyc
-.env
+
+# Ignore streamlit files
+.streamlit/
+
+# Ignore system files
+.DS_Store

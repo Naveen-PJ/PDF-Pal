@@ -1,37 +1,27 @@
 # PDF-Pal
 
-This project allows users to interact with PDF documents via a chatbot interface.
+This project is a chatbot application that enables users to ask questions based on the content of uploaded PDF files.
 
 ## Features
 
-- Upload a PDF file through the UI.
-- Extract and preprocess text from the PDF.
-- Use the OpenAI API for conversational responses.
-- Maintain conversational context.
-- Enter OpenAI API key through the UI.
-
-## Technologies
-
-- LangChain for conversational context management.
-- Streamlit for the user interface.
-- PyPDF2 for extracting text from PDFs.
+- Extract text from PDFs
+- Query Mixtral-8x7B using Groq API
+- Interactive user interface with Streamlit
 
 ## Setup
 
-1. Install dependencies:
-    ```
+1. Clone the repository.
+2. Install dependencies:
+    ```bash
     pip install -r requirements.txt
     ```
 
-2. Run the Streamlit app:
-    ```
-    streamlit run main.py
-    ```
+## Running the Application
+
+```bash
+streamlit run main.py
+```
 
 ## Deployment
 
-Instructions for deploying on platforms like Streamlit Cloud or Hugging Face will be provided.
-
-## License
-
-This project is licensed under the MIT License.
+To deploy the application on Streamlit Cloud or Hugging Face Spaces, follow their respective deployment guides and ensure all dependencies and configurations are included.
