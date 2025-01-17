@@ -5,6 +5,7 @@ This project is a chatbot application that enables users to ask questions based 
 ## Features
 
 - Extract text from PDFs
+- Read PDFs aloud (Experimental Feature)
 - Query Mixtral-8x7B using Groq API
 - Interactive user interface with Streamlit
 
@@ -25,7 +26,7 @@ streamlit run main.py
 
 ## Deployment
 
-This project is available on Streamlit Cloud. To deploy the application on Streamlit Cloud or Hugging Face Spaces, follow their respective deployment guides and ensure all dependencies and configurations are included.
+This project is available on Streamlit Cloud. You can access the deployed application here: [PDF-Pal on Streamlit Cloud](<insert_deployment_url_here>). To deploy the application on Streamlit Cloud or Hugging Face Spaces, follow their respective deployment guides and ensure all dependencies and configurations are included.
 
 ## License
 
