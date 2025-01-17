@@ -4,3 +4,4 @@ langchain
 requests
 python-dotenv
 langchain-groq
+pyttsx3
