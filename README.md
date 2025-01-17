@@ -1,4 +1,4 @@
- # PDF-Pal
+# PDF-Pal
 
 This project is a chatbot application that enables users to ask questions based on the content of uploaded PDF files.
 
@@ -25,4 +25,8 @@ streamlit run main.py
 
 ## Deployment
 
-To deploy the application on Streamlit Cloud or Hugging Face Spaces, follow their respective deployment guides and ensure all dependencies and configurations are included.
+This project is available on Streamlit Cloud. To deploy the application on Streamlit Cloud or Hugging Face Spaces, follow their respective deployment guides and ensure all dependencies and configurations are included.
+
+## License
+
+This project is licensed under the GNU General Public License v3.0. See the [LICENSE](LICENSE) file for details.
