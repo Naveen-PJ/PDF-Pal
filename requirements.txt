@@ -3,3 +3,4 @@ PyPDF2
 langchain
 requests
 python-dotenv
+langchain-groq
