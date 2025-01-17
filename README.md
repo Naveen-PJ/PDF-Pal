@@ -1,4 +1,4 @@
-# PDF-Pal
+ # PDF-Pal
 
 This project is a chatbot application that enables users to ask questions based on the content of uploaded PDF files.
 
@@ -15,6 +15,7 @@ This project is a chatbot application that enables users to ask questions based 
     ```bash
     pip install -r requirements.txt
     ```
+3. Add your Groq API key to `.streamlit/secrets.toml`.
 
 ## Running the Application
 

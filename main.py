@@ -5,16 +5,20 @@ pal = PDFPal()  # Correct instantiation
 
 def PDF_Pal():
     st.title("PDF-Pal")
-    
+
     st.sidebar.title('Upload PDF files')
+    st.sidebar.write("**Note:** This application can only process text-based PDFs. PDFs with scanned images or non-text elements are prone to errors and may not be fully processed.")
+    
     uploaded_files = st.sidebar.file_uploader("Upload PDF files", type="pdf", accept_multiple_files=True)
     
     if uploaded_files:
         pal.extract_text_from_pdfs(uploaded_files)
+        
         st.sidebar.success("PDFs processed successfully.")
         st.sidebar.write("You can now ask questions about the PDFs.")
         if st.sidebar.button("Read"):
-            pal.convert_to_speech()
+            pal.convert_to_speech(pal.text)
+
 
     
     model = 'mixtral-8x7b-32768'
@@ -35,6 +39,9 @@ def PDF_Pal():
             pal.query(message['human'], model, conversational_memory_length, pal.text)
 
     if st.button("Submit"):
+        if not pal.text.strip():
+            st.error("No text extracted from the PDF. Please upload a valid text-based PDF.")
+            return "No text extracted from the PDF."
         if user_question:
             answer = pal.query(user_question, model, conversational_memory_length, pal.text)
             st.session_state.chat_history.append({'human': user_question, 'AI': answer})
