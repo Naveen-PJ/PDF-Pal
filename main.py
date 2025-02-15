@@ -21,7 +21,7 @@ def PDF_Pal():
 
 
     
-    model = 'mixtral-8x7b-32768'
+    model = 'llama-3.3-70b-versatile'
     conversational_memory_length = 10
 
     user_question = st.text_input("Ask a question:")  # Decrease the height
