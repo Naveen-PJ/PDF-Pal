@@ -1,51 +1,78 @@
 import streamlit as st
 from src.PDF_Pal import PDFPal
+import re
 
-pal = PDFPal()  # Correct instantiation
+# Configure Streamlit page
+st.set_page_config(
+    page_title="PDF-Pal",
+    page_icon="📄",
+    layout="centered"
+)
+
+# Initialize PDFPal
+pal = PDFPal()
 
 def PDF_Pal():
-    st.title("PDF-Pal")
+    # Title and description
+    st.title("PDF-Pal 📄")
+    st.write("Ask questions about your uploaded PDFs")
 
-    st.sidebar.title('Upload PDF files')
-    st.sidebar.write("**Note:** This application can only process text-based PDFs. PDFs with scanned images or non-text elements are prone to errors and may not be fully processed.")
-    
-    uploaded_files = st.sidebar.file_uploader("Upload PDF files", type="pdf", accept_multiple_files=True)
-    
+    # Sidebar for PDF upload
+    st.sidebar.header("Upload PDFs")
+    uploaded_files = st.sidebar.file_uploader(
+        "Choose PDF files", 
+        type="pdf", 
+        accept_multiple_files=True
+    )
+
+    # Process PDFs if uploaded
     if uploaded_files:
-        pal.extract_text_from_pdfs(uploaded_files)
-        
-        st.sidebar.success("PDFs processed successfully.")
-        st.sidebar.write("You can now ask questions about the PDFs.")
-        if st.sidebar.button("Read"):
-            pal.convert_to_speech(pal.text)
-
+        with st.spinner('Processing PDFs...'):
+            pal.extract_text_from_pdfs(uploaded_files)
+        st.sidebar.success("PDFs processed successfully")
 
     
-    model = 'llama-3.3-70b-versatile'
-    conversational_memory_length = 10
+    # Create columns for input and button
+    # Create a row with the text input and button aligned
+    col1, col2 = st.columns([7, 1])
 
-    user_question = st.text_input("Ask a question:")  # Decrease the height
+    with col1:
+        st.markdown("<br>", unsafe_allow_html=True)
+        user_question = st.text_input(
+            "", 
+            placeholder="What would you like to know?", 
+            label_visibility="collapsed"
+        )
 
-    # Initialize the conversation with the prompt
-    if 'initialized' not in st.session_state:
-        initial_prompt = "You are PDF-Pal, an AI assistant that helps users with information from PDF documents and general assistance."
-        pal.query(initial_prompt, model, conversational_memory_length, pal.text)
-        st.session_state.initialized = True
+    with col2:
+        st.markdown("<br>", unsafe_allow_html=True)  # Adds some vertical alignment padding
+        submit_button = st.button("Ask", use_container_width=True, key="ask_button")
 
-    if 'chat_history' not in st.session_state:
-        st.session_state.chat_history = []
-    else:
-        for message in st.session_state.chat_history:
-            pal.query(message['human'], model, conversational_memory_length, pal.text)
 
-    if st.button("Submit"):
+    # Response area
+    response_container = st.container()
+
+    # Query processing
+    if submit_button and user_question:
+        # Check if PDFs are uploaded
         if not pal.text.strip():
-            st.error("No text extracted from the PDF. Please upload a valid text-based PDF.")
-            return "No text extracted from the PDF."
-        if user_question:
+            st.error("Please upload a PDF first")
+            return
+
+        # Generate response
+        with st.spinner('Thinking...'):
+            # Use the existing query method
+            model = 'deepseek-r1-distill-llama-70b'
+            conversational_memory_length = 10
+            
             answer = pal.query(user_question, model, conversational_memory_length, pal.text)
-            st.session_state.chat_history.append({'human': user_question, 'AI': answer})
-            st.write("PDF-Pal:\n", answer)
+            
+            # Clean up response (remove any think tags)
+            clean_response = re.sub(r'<think>.*?</think>', '', answer, flags=re.DOTALL)
+            
+            # Display response
+            with response_container:
+                st.info(clean_response)
 
 if __name__ == "__main__":
     PDF_Pal()

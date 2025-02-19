@@ -5,8 +5,9 @@ This project is a chatbot application that enables users to ask questions based 
 ## Features
 
 - Extract text from PDFs
-- Read PDFs aloud (Experimental Feature)
-- Query Mixtral-8x7B using Groq API
+- Query DeepSeek-R1-Distill-Llama-70B using Groq API
+- Advanced semantic search and context retrieval
+- Intelligent document understanding and question answering
 - Interactive user interface with Streamlit
 
 ## Setup

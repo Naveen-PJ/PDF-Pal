@@ -5,3 +5,7 @@ requests
 python-dotenv
 langchain-groq
 pyttsx3
+chromadb
+spacy
+sentence-transformers
+# Install spacy model: python -m spacy download en_core_web_sm
