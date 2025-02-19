@@ -27,9 +27,10 @@ def PDF_Pal():
 
     # Process PDFs if uploaded
     if uploaded_files:
-        with st.spinner('Processing PDFs...'):
-            pal.extract_text_from_pdfs(uploaded_files)
-        st.sidebar.success("PDFs processed successfully")
+        with st.sidebar:
+            with st.spinner('Processing PDFs...'):
+                pal.extract_text_from_pdfs(uploaded_files)
+            st.sidebar.success("PDFs processed successfully")
 
     
     # Create columns for input and button
@@ -60,7 +61,7 @@ def PDF_Pal():
             return
 
         # Generate response
-        with st.spinner('Thinking...'):
+        with st.spinner('Generating response...'):
             # Use the existing query method
             model = 'deepseek-r1-distill-llama-70b'
             conversational_memory_length = 10
