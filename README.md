@@ -27,7 +27,7 @@ streamlit run main.py
 
 ## Deployment
 
-This project is available on Streamlit Cloud. You can access the deployed application here: [PDF-Pal on Streamlit Cloud](https://pdf-pal-tqtkhy2bb9wqnrnimkcaff.streamlit.app/). To deploy the application on Streamlit Cloud or Hugging Face Spaces, follow their respective deployment guides and ensure all dependencies and configurations are included.
+This project is available on Streamlit Cloud. You can access the deployed application here: [PDF-Pal on Streamlit Cloud](https://pdf-pal-v1.streamlit.app/). To deploy the application on Streamlit Cloud or Hugging Face Spaces, follow their respective deployment guides and ensure all dependencies and configurations are included.
 
 ## License
 
