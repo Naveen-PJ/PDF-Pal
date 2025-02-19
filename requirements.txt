@@ -1,27 +1,10 @@
-# Core Libraries
 streamlit
 PyPDF2
-re  # Built-in Python module, no installation needed
-
-# AI and Machine Learning
 langchain
 langchain-community
-langchain-groq
-sentence-transformers
-transformers
-
-# Vector Store
 faiss-cpu
-
-# Text-to-Speech
+huggingface-hub
 pyttsx3
-
-# Embeddings and NLP
-spacy
-# Install spacy model: python -m spacy download en_core_web_sm
-
-# Optional: Environment Management
-python-dotenv
-
-# Logging (built-in, no installation needed)
-# Specific version constraints can be added if needed
+langchain-groq
+torch  
+transformers  
