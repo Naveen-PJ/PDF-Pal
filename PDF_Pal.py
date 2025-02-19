@@ -15,7 +15,7 @@ pal = PDFPal()
 def PDF_Pal():
     # Title and description
     st.title("PDF-Pal 📄")
-    st.write("Ask questions about your uploaded PDFs")
+    
 
     # Sidebar for PDF upload
     st.sidebar.header("Upload PDFs")
@@ -38,11 +38,9 @@ def PDF_Pal():
     col1, col2 = st.columns([7, 1])
 
     with col1:
-        st.markdown("<br>", unsafe_allow_html=True)
         user_question = st.text_input(
-            "", 
-            placeholder="What would you like to know?", 
-            label_visibility="collapsed"
+            "Ask questions about your uploaded PDFs", 
+            placeholder="What would you like to know?"
         )
 
     with col2:
