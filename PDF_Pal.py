@@ -1,5 +1,5 @@
 import streamlit as st
-from src.PDF_Pal import PDFPal
+from src.src_PDF_Pal import PDFPal
 import re
 
 # Configure Streamlit page
