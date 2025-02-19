@@ -8,3 +8,5 @@ pyttsx3
 langchain-groq
 torch  
 transformers  
+sentence-transformers
+langchain-huggingface
