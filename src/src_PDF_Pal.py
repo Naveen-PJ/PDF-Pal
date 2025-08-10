@@ -3,10 +3,8 @@ import streamlit as st
 from PyPDF2 import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
-import torch
 from langchain_community.vectorstores import FAISS
-# We will use SentenceTransformer directly again
-from sentence_transformers import SentenceTransformer 
+from langchain_huggingface import HuggingFaceEmbeddings
 
 import pyttsx3
 from langchain.chains import ConversationChain
@@ -18,32 +16,16 @@ groq_api_key = st.secrets["groq"]["API_KEY"]
 # Configure logging
 logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# --- Custom Wrapper Class ---
-# This class makes SentenceTransformer compatible with LangChain's FAISS.from_texts
-class CustomSentenceTransformerEmbeddings:
-    def __init__(self, model_name, device):
-        self.model = SentenceTransformer(model_name, device=device)
-
-    def embed_documents(self, texts):
-        return self.model.encode(texts, convert_to_numpy=False, convert_to_tensor=True).tolist()
-
-    def embed_query(self, text):
-        return self.model.encode(text, convert_to_numpy=False, convert_to_tensor=True).tolist()
-# -----------------------------
-
 class PDFPal:
     def __init__(self):
         self.text = ""
         self.chat_history = []
         
-        # Determine the device to use
-        device = "cuda" if torch.cuda.is_available() else "cpu"
-        
-        # Initialize embedding model using our custom wrapper
+        # Initialize embedding model
         try:
-            self.embedding = CustomSentenceTransformerEmbeddings(
-                model_name='all-MiniLM-L6-v2',
-                device=device
+            # Use Langchain's HuggingFace embeddings
+            self.embedding = HuggingFaceEmbeddings(
+                model_name='all-MiniLM-L6-v2'
             )
         except Exception as e:
             logging.error(f"Error loading embedding model: {e}")
@@ -89,6 +71,8 @@ class PDFPal:
                 texts=text_chunks, 
                 embedding=self.embedding
             )
+            
+            #st.sidebar.success(f"Vectorized {len(text_chunks)} text chunks.")
         except Exception as e:
             logging.error(f"Error creating vector store: {e}")
             st.error(f"Failed to create vector store: {e}")
@@ -100,7 +84,7 @@ class PDFPal:
                 # Perform similarity search
                 results = self.vectorstore.similarity_search(
                     query, 
-                    k=3  # Top 3 most relevant chunks
+                    k=5  # Top 5 most relevant chunks
                 )
                 
                 # Combine relevant chunks
