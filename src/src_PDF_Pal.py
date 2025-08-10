@@ -5,7 +5,8 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 import torch
 from langchain_community.vectorstores import FAISS
-from langchain_community.embeddings import HuggingFaceEmbeddings
+# We will use SentenceTransformer directly again
+from sentence_transformers import SentenceTransformer 
 
 import pyttsx3
 from langchain.chains import ConversationChain
@@ -17,21 +18,32 @@ groq_api_key = st.secrets["groq"]["API_KEY"]
 # Configure logging
 logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %(message)s')
 
+# --- Custom Wrapper Class ---
+# This class makes SentenceTransformer compatible with LangChain's FAISS.from_texts
+class CustomSentenceTransformerEmbeddings:
+    def __init__(self, model_name, device):
+        self.model = SentenceTransformer(model_name, device=device)
+
+    def embed_documents(self, texts):
+        return self.model.encode(texts, convert_to_numpy=False, convert_to_tensor=True).tolist()
+
+    def embed_query(self, text):
+        return self.model.encode(text, convert_to_numpy=False, convert_to_tensor=True).tolist()
+# -----------------------------
+
 class PDFPal:
     def __init__(self):
         self.text = ""
         self.chat_history = []
-
+        
         # Determine the device to use
-        # This checks for a CUDA-enabled GPU; if not found, it defaults to CPU
         device = "cuda" if torch.cuda.is_available() else "cpu"
         
-        # Initialize embedding model
+        # Initialize embedding model using our custom wrapper
         try:
-            # Use Langchain's HuggingFace embeddings
-            self.embedding = HuggingFaceEmbeddings(
+            self.embedding = CustomSentenceTransformerEmbeddings(
                 model_name='all-MiniLM-L6-v2',
-                model_kwargs={'device': device}
+                device=device
             )
         except Exception as e:
             logging.error(f"Error loading embedding model: {e}")
@@ -77,8 +89,6 @@ class PDFPal:
                 texts=text_chunks, 
                 embedding=self.embedding
             )
-            
-            #st.sidebar.success(f"Vectorized {len(text_chunks)} text chunks.")
         except Exception as e:
             logging.error(f"Error creating vector store: {e}")
             st.error(f"Failed to create vector store: {e}")
