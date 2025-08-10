@@ -4,7 +4,7 @@ from PyPDF2 import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 from langchain_community.vectorstores import FAISS
-from langchain_huggingface import HuggingFaceEmbeddings
+from sentence_transformers import SentenceTransformer
 
 import pyttsx3
 from langchain.chains import ConversationChain
@@ -24,9 +24,7 @@ class PDFPal:
         # Initialize embedding model
         try:
             # Use Langchain's HuggingFace embeddings
-            self.embedding = HuggingFaceEmbeddings(
-                model_name='all-MiniLM-L6-v2'
-            )
+            self.embedding = SentenceTransformer('all-MiniLM-L6-v2')
         except Exception as e:
             logging.error(f"Error loading embedding model: {e}")
             st.error(f"Failed to load embedding model: {e}")
