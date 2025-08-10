@@ -3,7 +3,7 @@ __pycache__/
 *.pyc
 
 # Ignore streamlit files
-.streamlit/
+.streamlit
 
 # Ignore system files
 .DS_Store
