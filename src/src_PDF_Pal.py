@@ -5,7 +5,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 import torch
 from langchain_community.vectorstores import FAISS
-from sentence_transformers import SentenceTransformer
+from langchain_community.embeddings import HuggingFaceEmbeddings
 
 import pyttsx3
 from langchain.chains import ConversationChain
@@ -25,12 +25,14 @@ class PDFPal:
         # Determine the device to use
         # This checks for a CUDA-enabled GPU; if not found, it defaults to CPU
         device = "cuda" if torch.cuda.is_available() else "cpu"
-        st.write(f"Using device: {device}") # Optional: for debugging purposes
         
         # Initialize embedding model
         try:
             # Use Langchain's HuggingFace embeddings
-            self.embedding = SentenceTransformer('all-MiniLM-L6-v2', device=device)
+            self.embedding = HuggingFaceEmbeddings(
+                model_name='all-MiniLM-L6-v2',
+                model_kwargs={'device': device}
+            )
         except Exception as e:
             logging.error(f"Error loading embedding model: {e}")
             st.error(f"Failed to load embedding model: {e}")
