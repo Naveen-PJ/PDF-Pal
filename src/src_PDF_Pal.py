@@ -72,7 +72,7 @@ class PDFPal:
                 embedding=self.embedding
             )
             
-            #st.sidebar.success(f"Vectorized {len(text_chunks)} text chunks.")
+            st.sidebar.success(f"Vectorized {len(text_chunks)} text chunks.")
         except Exception as e:
             logging.error(f"Error creating vector store: {e}")
             st.error(f"Failed to create vector store: {e}")
@@ -120,21 +120,3 @@ class PDFPal:
             logging.error(f"Error during query processing: {e}")
             st.error(f"Error during query processing: {e}")
             return "An error occurred during query processing."
-
-    def convert_to_speech(self, text):
-        if not text.strip():
-            logging.error("No text available for conversion to speech.")
-            st.error("No text available for conversion to speech.")
-            return
-
-        try:
-            engine = pyttsx3.init()
-            voices = engine.getProperty('voices')
-            engine.setProperty('voice', voices[1].id)
-            engine.setProperty('rate', 180)
-            engine.setProperty('volume', 1.0)
-            engine.say(text)
-            engine.runAndWait()
-        except Exception as e:
-            logging.error(f"Error converting text to speech: {e}")
-            st.error(f"Error converting text to speech: {e}")
