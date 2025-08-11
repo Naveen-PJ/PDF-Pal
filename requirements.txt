@@ -1,5 +1,4 @@
 streamlit
-PyPDF2
 langchain
 langchain-community
 faiss-cpu
@@ -11,3 +10,4 @@ transformers
 # The following line is crucial and was the source of the error
 sentence-transformers
 langchain-huggingface
+pypdf
