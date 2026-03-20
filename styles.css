@@ -1,0 +1,51 @@
+/* Sidebar Structural Modifications */
+/* We target standard Streamlit CSS classes explicitly. data-testid is standard for Streamlit styling hacks. */
+[data-testid="stSidebarUserContent"] {
+    padding-top: 2rem !important;
+}
+
+[data-testid="stSidebar"] hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* Chat Title Sticky Header Constraints */
+div.element-container:has(.sticky-title) {
+    position: sticky;
+    top: 2.875rem; 
+    background-color: var(--background-color, #0e1117);
+    z-index: 999;
+    border-bottom: 1px solid rgba(128,128,128, 0.2);
+}
+
+.sticky-title {
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Flash Banner Global Notifications */
+.flash-banner {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    z-index: 999999;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flash-success {
+    background: linear-gradient(135deg, #0ba360 0%, #3cba92 100%);
+}
+
+.flash-error {
+    background: linear-gradient(135deg, #f85032 0%, #e73827 100%);
+}
