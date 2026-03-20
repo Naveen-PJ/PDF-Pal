@@ -10,7 +10,7 @@ Upload your PDF files and chat directly with their content!
 <!-- 📸 PRO TIP: Uncomment the line below and add a GIF/Screenshot of your UI to make this README a 10/10! -->
 <!-- <p align="center"><img src="assets/demo_screenshot.png" alt="PDF-Pal UI Demo" width="800"/></p> -->
 
-> **🌐 Live Demo:** You can access the deployed application here: [https://pdf-pal-v1.streamlit.app/](https://pdf-pal-v1.streamlit.app/)
+> **🌐 Live Demo:** You can access the deployed application here: [PDF_Pal_V2](https://pdf-pal-v2.streamlit.app/)
 
 ## ✨ Features
 
