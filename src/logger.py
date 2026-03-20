@@ -15,14 +15,14 @@ def configure_logger():
     logger.level("CRITICAL", color="<red>")
     
     # Console handler (Uncomment to enable terminal output)
-    # logger.add(
-    #     sys.stdout, 
-    #     format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <level>{message}</level>", 
-    #     level="INFO"
-    # )
+    logger.add(
+        sys.stdout, 
+        format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <level>{message}</level>", 
+        level="INFO"
+    )
     
     # # File handler
-    logger.add("app.log", rotation="1 MB", retention="7 days", compression="zip", level="DEBUG", format="{time:YYYY-MM-DD HH:mm:ss} | {level: <8} | {message}")
+    # logger.add("app.log", rotation="1 MB", retention="7 days", compression="zip", level="DEBUG", format="{time:YYYY-MM-DD HH:mm:ss} | {level: <8} | {message}")
 
 # Run configuration once on import
 configure_logger()
