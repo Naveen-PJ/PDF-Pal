@@ -1,11 +1,35 @@
-# Ignore Python cache files
+# Byte-compiled / optimized / DLL files
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
 
-# Ignore streamlit files
-.streamlit
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
 
-# Ignore system files
+# Virtual Environments
+.venv/
+venv/
+env/
+ENV/
+
+# Development Configuration / Secrets
+.streamlit/
+.env
+config.md
+
+# RAG Memory Output & Cache
+Data/
+rag_memory_dump_*.json
+chroma_db/
+*.sqlite3
+
+# Logs
+*.log
+
+# System Files
 .DS_Store
-
-.log
+Thumbs.db
+ehthumbs.db
