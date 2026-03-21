@@ -358,7 +358,7 @@ class PDF_Pal_App:
                 prompt = map_prompt_template.format(text=chunk.text)
                 try:
                     response = self.brain.client.chat.completions.create(
-                        model=load.LLM_MODEL,
+                        model=load.SUMMARY_MODEL,
                         messages=[{"role": "user", "content": prompt}],
                         temperature=0.3
                     )
@@ -378,7 +378,7 @@ class PDF_Pal_App:
             reduce_prompt = reduce_prompt_template.format(combined_text=combined_text)
             
             final_res = self.brain.client.chat.completions.create(
-                model=load.LLM_MODEL,
+                model=load.SUMMARY_MODEL,
                 messages=[{"role": "user", "content": reduce_prompt}],
                 temperature=0.3
             )
