@@ -42,7 +42,7 @@ config = Config_env()
 
 class LoadModelConfig(BaseSettings):
     LLM_MODEL: str = Field(default="llama-3.1-8b-instant")
-    SUMMARY_MODEL: str = Field(default="meta-llama/llama-prompt-guard-2-86m") # <-- Add this line for the default summary model
+    SUMMARY_MODEL: str = Field(default="meta-llama/llama-prompt-guard-2-86m")
     MEMORY_DUMP: bool = Field(default=False)
 
     model_config = SettingsConfigDict(
