@@ -80,3 +80,62 @@ div.element-container:has(.sticky-title) {
     padding-right: 0 !important;
     min-width: 0 !important; 
 }
+
+/* Custom Bulletproof Sidebar Row Grid */
+/* This targets our injected HTML div and grabs the next 3 Streamlit buttons explicitly */
+.custom-chat-row + div.stButton, 
+.custom-chat-row + div.stButton + div.element-container, 
+.custom-chat-row + div.stButton + div.element-container + div.stButton {
+    display: inline-block !important;
+    vertical-align: middle !important;
+    margin-right: 2px !important;
+}
+
+/* Chat string button taking remaining max space */
+.custom-chat-row + div.stButton {
+    width: calc(100% - 90px) !important; 
+}
+
+/* The two small icon buttons strictly sized */
+.custom-chat-row + div.stButton + div.element-container, 
+.custom-chat-row + div.stButton + div.element-container + div.stButton {
+   width: 40px !important; 
+}
+
+/* Force tiny padding strictly on these row buttons */
+.custom-chat-row ~ div button {
+    padding-left: 0.1rem !important;
+    padding-right: 0.1rem !important;
+}
+
+/* Magic targeted mobile force-row layout */
+div.element-container:has(span.sidebar-chat-btn-row) + div[data-testid="stHorizontalBlock"] {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 0 !important;
+}
+
+/* Force children to behave like a flex row */
+div.element-container:has(span.sidebar-chat-btn-row) + div[data-testid="stHorizontalBlock"] > div[data-testid="column"] {
+    min-width: 0 !important;
+    width: auto !important;
+}
+
+/* First Button (Chat Name) gets everything else */
+div.element-container:has(span.sidebar-chat-btn-row) + div[data-testid="stHorizontalBlock"] > div[data-testid="column"]:nth-child(1) {
+    flex: 1 1 0% !important;
+}
+
+/* Icons get locked to 35px widths */
+div.element-container:has(span.sidebar-chat-btn-row) + div[data-testid="stHorizontalBlock"] > div[data-testid="column"]:nth-child(2),
+div.element-container:has(span.sidebar-chat-btn-row) + div[data-testid="stHorizontalBlock"] > div[data-testid="column"]:nth-child(3) {
+    flex: 0 0 35px !important;
+}
+
+/* Shrink button padding to fit the 35px box */
+div.element-container:has(span.sidebar-chat-btn-row) + div[data-testid="stHorizontalBlock"] button {
+    padding-left: 0.1rem !important;
+    padding-right: 0.1rem !important;
+}

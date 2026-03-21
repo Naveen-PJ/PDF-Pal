@@ -104,117 +104,57 @@ def main() -> None:
         # Session List
         sessions_sorted = sorted(st.session_state.sessions.items(), key=lambda x: x[1]['created_at'], reverse=True)
         for sid, sdata in sessions_sorted:
-            # Layout for chat button + file toggle + delete button
-            col_name, col_file, col_del = st.columns([0.7, 0.15, 0.15], vertical_alignment="center")
             
             label = sdata["name"]
             if sid == st.session_state.current_session_id:
                 label = f"🟢 {label}"
+            
+            # Wrap the columns in a container
+            with st.container():
+                # We inject an empty HTML tag that acts as a hook for our CSS!
+                st.markdown('<span class="sidebar-chat-btn-row"></span>', unsafe_allow_html=True)
                 
-            with col_name:
-                if st.button(label, key=f"session_btn_{sid}", use_container_width=True):
-                    st.session_state.current_session_id = sid
-                    st.rerun()
-                    
-            with col_file:
-                toggle_key = f"toggle_upload_{sid}"
-                
-                btn_ph = st.empty()
-                if btn_ph.button("📂", key=f"file_btn_{sid}", help="View/Upload Files", type="tertiary"):
-                    st.session_state[toggle_key] = not st.session_state.get(toggle_key, False)
-                    st.rerun()
+                # Re-add columns, keep the ratios
+                col_name, col_file, col_del = st.columns([0.7, 0.15, 0.15], vertical_alignment="center")
 
-            with col_del:
-                if st.button("🗑️", key=f"del_btn_{sid}", help="Delete chat", type="tertiary"):
-                    deleted_name = st.session_state.sessions[sid]["name"]
-                    del st.session_state.sessions[sid]
-                    # If active session was deleted, switch context
-                    if st.session_state.current_session_id == sid:
-                        if len(st.session_state.sessions) > 0:
-                            # Switch to most recent chat
-                            st.session_state.current_session_id = sorted(
-                                st.session_state.sessions.items(), 
-                                key=lambda x: x[1]['created_at'], 
-                                reverse=True
-                            )[0][0]
-                        else:
-                            # Create a fresh session
-                            new_id = str(uuid.uuid4())
-                            st.session_state.sessions[new_id] = {
-                                "name": "New Chat",
-                                "history": [],
-                                "created_at": datetime.datetime.now(),
-                                "docs_processed": False,
-                                "files": []
-                            }
-                            st.session_state.current_session_id = new_id
-                            
-                    st.session_state.flash_msg = ("success", f"✅ Chat '{deleted_name}' successfully deleted!")
-                    st.rerun()
-
-            # Conditionally render the inline expander natively beneath the specific session
-            dropdown_ph = st.empty()
-            if st.session_state.get(toggle_key, False):
-                with dropdown_ph.container(border=True):
-                    session_files = sdata.get("files", [])
-                    if session_files:
-                        st.markdown("**Uploaded Files:**")
-                        for f in session_files:
-                            st.markdown(f"- `{f}`")
-                    else:
-                        st.markdown("_No files uploaded._")
+                with col_name:
+                    if st.button(label, key=f"session_btn_{sid}", use_container_width=True):
+                        st.session_state.current_session_id = sid
+                        st.rerun()
                         
-                    st.divider()
-                    
-                    uploaded_files = st.file_uploader(
-                        "Upload PDFs",
-                        type="pdf",
-                        accept_multiple_files=True,
-                        label_visibility="collapsed",
-                        key=f"uploader_{sid}"
-                    )
-                    
-                    if uploaded_files:
-                        if st.button("Process PDFs", key=f"process_{sid}", use_container_width=True, type="primary"):
-                            
-                            # 1. Instantly destruct the dropdown container physically from the Streamlit DOM 
-                            dropdown_ph.empty()
-                            
-                            # 2. Spawn the native Streamlit floating spinner animation precisely inside the side bar button column
-                            btn_ph.empty()
-                            with btn_ph:
-                                with st.spinner(" "):  # Emits only the spinner wheel without chunky text
-                                    # 3. Flawlessly flush this UI destruct to Chrome prior to server CPU lock
-                                    import time
-                                    time.sleep(0.05)
-                                    
-                                    # 4. Safely block the thread doing actual heavy text extraction
-                                    success = st.session_state.pdf_pal_app.process_pdfs(
-                                        uploaded_files, 
-                                        session_id=sid
-                                    )
-                            
-                            if success:
-                                sdata["docs_processed"] = True
-                                if "files" not in sdata:
-                                    sdata["files"] = []
-                                sdata["files"].extend([f.name for f in uploaded_files])
-                                
-                                st.session_state.flash_msg = ("success", f"✅ Successfully processed {len(uploaded_files)} PDF(s)!")
-                                logger.info(f"PDF processing complete for session {sid}.")
-                                
-                                # Rename chat if it's new
-                                if sdata["name"] == "New Chat":
-                                    short_name = uploaded_files[0].name
-                                    if len(short_name) > 20: short_name = short_name[:17] + "..."
-                                    sdata["name"] = short_name
-                                    
-                                st.session_state.current_session_id = sid
+                with col_file:
+                    toggle_key = f"toggle_upload_{sid}"
+                    btn_ph = st.empty()
+                    if btn_ph.button("📂", key=f"file_btn_{sid}", help="View/Upload Files", type="tertiary"):
+                        st.session_state[toggle_key] = not st.session_state.get(toggle_key, False)
+                        st.rerun()
+
+                with col_del:
+                    if st.button("🗑️", key=f"del_btn_{sid}", help="Delete chat", type="tertiary"):
+                        # ... (Keep your existing delete logic here)
+                        deleted_name = st.session_state.sessions[sid]["name"]
+                        del st.session_state.sessions[sid]
+                        # If active session was deleted, switch context
+                        if st.session_state.current_session_id == sid:
+                            if len(st.session_state.sessions) > 0:
+                                st.session_state.current_session_id = sorted(
+                                    st.session_state.sessions.items(), 
+                                    key=lambda x: x[1]['created_at'], 
+                                    reverse=True
+                                )[0][0]
                             else:
-                                st.session_state.flash_msg = ("error", "❌ Failed to extract text from the PDF.")
+                                new_id = str(uuid.uuid4())
+                                st.session_state.sessions[new_id] = {
+                                    "name": "New Chat", "history": [], "created_at": datetime.datetime.now(),
+                                    "docs_processed": False, "files": []
+                                }
+                                st.session_state.current_session_id = new_id
                                 
-                            st.session_state[toggle_key] = False
-                            st.rerun()
+                        st.session_state.flash_msg = ("success", f"✅ Chat '{deleted_name}' successfully deleted!")
+                        st.rerun()
+            
+            # Close the CSS grid wrapper
+            st.markdown('</div>', unsafe_allow_html=True)
 
     # --- Main Chat Area Background Context ---
     # Retrieve current session data
