@@ -152,9 +152,70 @@ def main() -> None:
                                 
                         st.session_state.flash_msg = ("success", f"✅ Chat '{deleted_name}' successfully deleted!")
                         st.rerun()
-            
-            # Close the CSS grid wrapper
-            st.markdown('</div>', unsafe_allow_html=True)
+
+            # Conditionally render the inline expander natively beneath the specific session
+            dropdown_ph = st.empty()
+            if st.session_state.get(toggle_key, False):
+                with dropdown_ph.container(border=True):
+                    session_files = sdata.get("files", [])
+                    if session_files:
+                        st.markdown("**Uploaded Files:**")
+                        for f in session_files:
+                            st.markdown(f"- `{f}`")
+                    else:
+                        st.markdown("_No files uploaded._")
+                        
+                    st.divider()
+                    
+                    uploaded_files = st.file_uploader(
+                        "Upload PDFs",
+                        type="pdf",
+                        accept_multiple_files=True,
+                        label_visibility="collapsed",
+                        key=f"uploader_{sid}"
+                    )
+                    
+                    if uploaded_files:
+                        if st.button("Process PDFs", key=f"process_{sid}", use_container_width=True, type="primary"):
+                            
+                            # 1. Instantly destruct the dropdown container physically from the Streamlit DOM 
+                            dropdown_ph.empty()
+                            
+                            # 2. Spawn the native Streamlit floating spinner animation precisely inside the side bar button column
+                            btn_ph.empty()
+                            with btn_ph:
+                                with st.spinner(" "):  # Emits only the spinner wheel without chunky text
+                                    # 3. Flawlessly flush this UI destruct to Chrome prior to server CPU lock
+                                    import time
+                                    time.sleep(0.05)
+                                    
+                                    # 4. Safely block the thread doing actual heavy text extraction
+                                    success = st.session_state.pdf_pal_app.process_pdfs(
+                                        uploaded_files, 
+                                        session_id=sid
+                                    )
+                            
+                            if success:
+                                sdata["docs_processed"] = True
+                                if "files" not in sdata:
+                                    sdata["files"] = []
+                                sdata["files"].extend([f.name for f in uploaded_files])
+                                
+                                st.session_state.flash_msg = ("success", f"✅ Successfully processed {len(uploaded_files)} PDF(s)!")
+                                logger.info(f"PDF processing complete for session {sid}.")
+                                
+                                # Rename chat if it's new
+                                if sdata["name"] == "New Chat":
+                                    short_name = uploaded_files[0].name
+                                    if len(short_name) > 20: short_name = short_name[:17] + "..."
+                                    sdata["name"] = short_name
+                                    
+                                st.session_state.current_session_id = sid
+                            else:
+                                st.session_state.flash_msg = ("error", "❌ Failed to extract text from the PDF.")
+                                
+                            st.session_state[toggle_key] = False
+                            st.rerun()
 
     # --- Main Chat Area Background Context ---
     # Retrieve current session data

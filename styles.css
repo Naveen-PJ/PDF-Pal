@@ -50,92 +50,40 @@ div.element-container:has(.sticky-title) {
     background: linear-gradient(135deg, #f85032 0%, #e73827 100%);
 }
 
-/* Prevent Streamlit columns from wrapping onto new lines on mobile devices in the sidebar */
-[data-testid="stSidebar"] div[data-testid="stHorizontalBlock"] {
+/* =========================================================
+   Sidebar Mobile Layout Fix
+   Targets specifically the row with 'sidebar-chat-btn-row' 
+   ========================================================= */
+
+/* 1. Force the row to NEVER wrap and hide overflow so the resizer doesn't break */
+div.element-container:has(span.sidebar-chat-btn-row) + div[data-testid="stHorizontalBlock"] {
     flex-wrap: nowrap !important;
-    gap: 0.2rem !important; 
+    gap: 2px !important;
+    overflow: hidden !important; 
 }
 
-/* Force ALL inner columns to allow shrinking */
-[data-testid="stSidebar"] div[data-testid="column"] {
-    min-width: 0 !important;
-}
-
-/* 1. Chat Name Column: "0%" flex-basis forces it to aggressively shrink rather than push other items out */
-[data-testid="stSidebar"] div[data-testid="stHorizontalBlock"] > div:nth-child(1) {
-    flex: 1 1 0% !important; 
-    width: auto !important;
-}
-
-/* 2 & 3. Folder & Trash Columns: strictly 38px wide so they comfortably fit */
-[data-testid="stSidebar"] div[data-testid="stHorizontalBlock"] > div:nth-child(2),
-[data-testid="stSidebar"] div[data-testid="stHorizontalBlock"] > div:nth-child(3) {
-    flex: 0 0 38px !important;
-    width: 38px !important;
-}
-
-/* 3. Strip button padding inside the sidebar so the emojis don't balloon the width */
-[data-testid="stSidebar"] [data-testid="stHorizontalBlock"] .stButton > button {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
+/* 2. Strip Streamlit's arbitrary minimum widths that cause the 'stair-stepping' push */
+div.element-container:has(span.sidebar-chat-btn-row) + div[data-testid="stHorizontalBlock"] > div[data-testid="column"] {
     min-width: 0 !important; 
 }
 
-/* Custom Bulletproof Sidebar Row Grid */
-/* This targets our injected HTML div and grabs the next 3 Streamlit buttons explicitly */
-.custom-chat-row + div.stButton, 
-.custom-chat-row + div.stButton + div.element-container, 
-.custom-chat-row + div.stButton + div.element-container + div.stButton {
-    display: inline-block !important;
-    vertical-align: middle !important;
-    margin-right: 2px !important;
-}
-
-/* Chat string button taking remaining max space */
-.custom-chat-row + div.stButton {
-    width: calc(100% - 90px) !important; 
-}
-
-/* The two small icon buttons strictly sized */
-.custom-chat-row + div.stButton + div.element-container, 
-.custom-chat-row + div.stButton + div.element-container + div.stButton {
-   width: 40px !important; 
-}
-
-/* Force tiny padding strictly on these row buttons */
-.custom-chat-row ~ div button {
-    padding-left: 0.1rem !important;
-    padding-right: 0.1rem !important;
-}
-
-/* Magic targeted mobile force-row layout */
-div.element-container:has(span.sidebar-chat-btn-row) + div[data-testid="stHorizontalBlock"] {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: nowrap !important;
-    align-items: center !important;
-    gap: 0 !important;
-}
-
-/* Force children to behave like a flex row */
-div.element-container:has(span.sidebar-chat-btn-row) + div[data-testid="stHorizontalBlock"] > div[data-testid="column"] {
-    min-width: 0 !important;
+/* 3. Button 1: The Chat Name. Let it take all available shrinkable space. */
+div.element-container:has(span.sidebar-chat-btn-row) + div[data-testid="stHorizontalBlock"] > div[data-testid="column"]:nth-child(1) {
+    flex: 1 1 auto !important; 
     width: auto !important;
 }
 
-/* First Button (Chat Name) gets everything else */
-div.element-container:has(span.sidebar-chat-btn-row) + div[data-testid="stHorizontalBlock"] > div[data-testid="column"]:nth-child(1) {
-    flex: 1 1 0% !important;
-}
-
-/* Icons get locked to 35px widths */
+/* 4. Buttons 2 & 3: Icons. Give them just enough % to exist without rigid pixels breaking the resizer */
 div.element-container:has(span.sidebar-chat-btn-row) + div[data-testid="stHorizontalBlock"] > div[data-testid="column"]:nth-child(2),
 div.element-container:has(span.sidebar-chat-btn-row) + div[data-testid="stHorizontalBlock"] > div[data-testid="column"]:nth-child(3) {
-    flex: 0 0 35px !important;
+    flex: 0 0 15% !important;
+    width: 15% !important;
 }
 
-/* Shrink button padding to fit the 35px box */
+/* 5. Force the icons to fit inside their 15% columns by stripping heavy internal padding */
 div.element-container:has(span.sidebar-chat-btn-row) + div[data-testid="stHorizontalBlock"] button {
-    padding-left: 0.1rem !important;
-    padding-right: 0.1rem !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    min-width: 0 !important;
+    width: 100% !important;
 }
