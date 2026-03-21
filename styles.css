@@ -49,3 +49,26 @@ div.element-container:has(.sticky-title) {
 .flash-error {
     background: linear-gradient(135deg, #f85032 0%, #e73827 100%);
 }
+
+/* Prevent Streamlit columns from wrapping onto new lines on mobile devices in the sidebar */
+[data-testid="stSidebar"] [data-testid="stVerticalBlock"] [data-testid="stHorizontalBlock"] {
+    flex-wrap: nowrap !important;
+    gap: 0.2rem !important; /* Keep a tiny space between buttons */
+}
+
+/* Override the default mobile behavior that expands columns to 100% width */
+[data-testid="stSidebar"] [data-testid="column"] {
+    min-width: 0 !important;
+}
+
+/* Enforce the 70% / 15% / 15% width ratios you defined in st.columns on mobile */
+[data-testid="stSidebar"] [data-testid="stHorizontalBlock"] > div:nth-child(1) {
+    flex: 0 0 70% !important;
+    width: 70% !important;
+}
+
+[data-testid="stSidebar"] [data-testid="stHorizontalBlock"] > div:nth-child(2),
+[data-testid="stSidebar"] [data-testid="stHorizontalBlock"] > div:nth-child(3) {
+    flex: 0 0 15% !important;
+    width: 15% !important;
+}
