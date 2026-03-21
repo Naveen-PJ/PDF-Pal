@@ -53,30 +53,30 @@ div.element-container:has(.sticky-title) {
 /* Prevent Streamlit columns from wrapping onto new lines on mobile devices in the sidebar */
 [data-testid="stSidebar"] div[data-testid="stHorizontalBlock"] {
     flex-wrap: nowrap !important;
-    gap: 0.2rem !important; /* Keep a tiny space between buttons */
-    overflow-x: hidden !important; /* Prevent horizontal scroll in the container */
+    gap: 0.2rem !important; 
 }
 
-/* Force inner columns to not expand to 100% width automatically */
+/* Force ALL inner columns to allow shrinking */
 [data-testid="stSidebar"] div[data-testid="column"] {
     min-width: 0 !important;
 }
 
-/* 1. First column (Chat Name) takes up all available flex space */
+/* 1. Chat Name Column: "0%" flex-basis forces it to aggressively shrink rather than push other items out */
 [data-testid="stSidebar"] div[data-testid="stHorizontalBlock"] > div:nth-child(1) {
-    flex: 1 1 auto !important;
+    flex: 1 1 0% !important; 
     width: auto !important;
 }
 
-/* 2. Second and Third columns (Icons) stay at a fixed tiny width perfect for emojis */
+/* 2 & 3. Folder & Trash Columns: strictly 38px wide so they comfortably fit */
 [data-testid="stSidebar"] div[data-testid="stHorizontalBlock"] > div:nth-child(2),
 [data-testid="stSidebar"] div[data-testid="stHorizontalBlock"] > div:nth-child(3) {
-    flex: 0 0 45px !important;
-    width: 45px !important;
+    flex: 0 0 38px !important;
+    width: 38px !important;
 }
 
-/* 3. Reduce button padding strictly inside the sidebar to prevent visual overflow */
-[data-testid="stSidebar"] .stButton > button {
-    padding-left: 0.2rem !important;
-    padding-right: 0.2rem !important;
+/* 3. Strip button padding inside the sidebar so the emojis don't balloon the width */
+[data-testid="stSidebar"] [data-testid="stHorizontalBlock"] .stButton > button {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    min-width: 0 !important; 
 }
