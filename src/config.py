@@ -1,13 +1,21 @@
-from pydantic import BaseModel, Field
-from pydantic_settings import BaseSettings, SettingsConfigDict, PydanticBaseSettingsSource, TomlConfigSettingsSource
 from pathlib import Path
+
+from pydantic import BaseModel, Field
+from pydantic_settings import (
+    BaseSettings,
+    PydanticBaseSettingsSource,
+    SettingsConfigDict,
+    TomlConfigSettingsSource,
+)
 
 # Get the absolute path to the project root
 ROOT_DIR = Path(__file__).resolve().parent.parent
 SECRETS_PATH = ROOT_DIR / ".streamlit" / "secrets.toml"
 
+
 class GroqConfig(BaseModel):
     API_KEY: str
+
 
 class Config_env(BaseSettings):
     groq: GroqConfig
@@ -36,8 +44,12 @@ class Config_env(BaseSettings):
             TomlConfigSettingsSource(settings_cls),
         )
 
+
 # Instantiate the config so it can be imported elsewhere
-config = Config_env()
+try:
+    config = Config_env()
+except Exception:
+    config = None
 
 
 class LoadModelConfig(BaseSettings):
@@ -48,5 +60,6 @@ class LoadModelConfig(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=str(Path(__file__).resolve().parent.parent / "config.md")
     )
+
 
 load = LoadModelConfig()
