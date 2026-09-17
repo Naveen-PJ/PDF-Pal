@@ -41,7 +41,7 @@ config = Config_env()
 
 
 class LoadModelConfig(BaseSettings):
-    LLM_MODEL: str = Field(default="llama-3.1-8b-instant")
+    LLM_MODEL: str = Field(default="groq/compound")
     SUMMARY_MODEL: str = Field(default="meta-llama/llama-prompt-guard-2-86m")
     MEMORY_DUMP: bool = Field(default=False)
 
